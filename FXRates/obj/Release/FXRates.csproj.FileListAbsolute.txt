@@ -1,0 +1,8 @@
+C:\Users\shetes\Documents\Visual Studio 2013\Projects\FXRates\FXRates\bin\FXRates.dll.config
+C:\Users\shetes\Documents\Visual Studio 2013\Projects\FXRates\FXRates\bin\FXRates.dll
+C:\Users\shetes\Documents\Visual Studio 2013\Projects\FXRates\FXRates\bin\FXRates.pdb
+C:\Users\shetes\Documents\Visual Studio 2013\Projects\FXRates\FXRates\bin\Newtonsoft.Json.dll
+C:\Users\shetes\Documents\Visual Studio 2013\Projects\FXRates\FXRates\bin\Newtonsoft.Json.xml
+C:\Users\shetes\Documents\Visual Studio 2013\Projects\FXRates\FXRates\obj\Release\FXRates.csprojResolveAssemblyReference.cache
+C:\Users\shetes\Documents\Visual Studio 2013\Projects\FXRates\FXRates\obj\Release\FXRates.dll
+C:\Users\shetes\Documents\Visual Studio 2013\Projects\FXRates\FXRates\obj\Release\FXRates.pdb
