@@ -10,7 +10,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
   </PropertyGroup>
   <ItemGroup>
     <File Include="bin/FXRates.dll">
-      <publishTime>04/01/2016 23:27:39</publishTime>
+      <publishTime>04/02/2016 00:11:23</publishTime>
     </File>
     <File Include="bin/Newtonsoft.Json.dll">
       <publishTime>04/01/2016 21:26:08</publishTime>

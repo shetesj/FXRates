@@ -85,11 +85,6 @@ namespace FXRates
                 targetList = targets.ToString().Substring(0, targets.Length - 1);
             }
 
-            // ------- Should use this but free API does not allow changing source
-            //string url = baseURL + "/live" + accessKey + "&source=" + source
-            //    + "&currencies=" + targetList + jsonFormat;
-            
-            // Hence using this where I am fixing source to USD
             string url = baseURL + "/live" + accessKey + "&source=" + source
                 + "&currencies=" + targetList + jsonFormat;
 
