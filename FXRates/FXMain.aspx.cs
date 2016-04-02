@@ -5,15 +5,17 @@ using System.Web.UI.WebControls;
 using System.Net;
 using Newtonsoft.Json;
 using System.Text;
+using FXRates.Models;
+using System.Data;
 
-namespace FXRate
+namespace FXRates
 {
     public partial class WebForm1 : System.Web.UI.Page
     {
         private string baseURL = "http://apilayer.net/api";
         private string accessKey = "?access_key=3aa1675d116d7828ce8df0926e4fe95c";
         private string jsonFormat = "&format=1";
-        private string callback = "&callback=processJSON";
+        private static Dictionary<string, string> dctCurrencies;
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -22,7 +24,8 @@ namespace FXRate
                 // Get currency list
                 var url = baseURL + "/list" + accessKey;
                 var currList = getJSONdata<currList>(url);
-                var datasource = (from x in currList.Currencies
+                dctCurrencies = currList.Currencies;
+                var datasource = (from x in dctCurrencies
                                  select new
                                  {
                                      x.Key,
@@ -35,39 +38,18 @@ namespace FXRate
                 ddSource.DataValueField = "Key";
                 ddSource.DataBind();
                 
+                // Preselecting USD as the free API does not allow to change source
+                ListItem item = ddSource.Items.FindByValue("USD");
+                if (item != null)
+                    item.Selected = true;
+                
                 lstCurrencies.DataSource = datasource;
                 lstCurrencies.DataTextField = "DisplayText";
                 lstCurrencies.DataValueField = "Key";
                 lstCurrencies.DataBind();
+
+                divLbls.Visible = false;
             }
-        }
-
-        public class currList
-        {
-            public string Success { get; set; }
-            public string Terms { get; set; }
-            public string Privacy { get; set; }
-            public Dictionary<string, string> Currencies { get; set; }
-        }
-
-        public class CurrencyRates
-        {
-            public string Success { get; set; }
-            public string Terms { get; set; }
-            public string Privacy { get; set; }
-            public string License { get; set; }
-            public int TimeStamp { get; set; }
-            public string Source { get; set; }
-            public Dictionary<string, decimal> Quotes { get; set; }
-        }
-
-        public class OXR
-        {
-            public string Disclaimer { get; set; }
-            public string License { get; set; }
-            public int TimeStamp { get; set; }
-            public string Base { get; set; }
-            public Dictionary<string, decimal> Rates { get; set; }
         }
 
         private static T getJSONdata<T>(string url) where T : new()
@@ -108,7 +90,7 @@ namespace FXRate
             //    + "&currencies=" + targetList + jsonFormat;
             
             // Hence using this where I am fixing source to USD
-            string url = baseURL + "/live" + accessKey + "&source=USD"
+            string url = baseURL + "/live" + accessKey + "&source=" + source
                 + "&currencies=" + targetList + jsonFormat;
 
             getRatesData(url);
@@ -118,8 +100,29 @@ namespace FXRate
         public void getRatesData(string url)
         {
             var CurrencyRates = getJSONdata<CurrencyRates>(url);
-            grdResults.DataSource = CurrencyRates.Quotes;
+            string dest = String.Empty;
+            string source = String.Empty;
+            DataTable dt = new DataTable();
+            dt.Columns.Add(new DataColumn("Currency", typeof(string)));
+            dt.Columns.Add(new DataColumn("Rate", typeof(decimal)));
+
+            foreach (var qoute in CurrencyRates.Quotes)
+            {
+                source = qoute.Key.Substring(0, 3);
+                dest = qoute.Key.Substring(3);
+                DataRow dRow = dt.NewRow();
+                dRow[0] = dest + " - " + dctCurrencies[dest];
+                dRow[1] = qoute.Value;
+                dt.Rows.Add(dRow);
+            }
+            if (dt.Rows.Count > 0)
+                divLbls.Visible = true;
+            grdResults.DataSource = dt;
             grdResults.DataBind();
+            System.DateTime dtDateTime =
+                new DateTime(1970, 1, 1, 0, 0, 0).AddSeconds(CurrencyRates.TimeStamp).ToLocalTime();
+            lblTimestamp.Text = dtDateTime.ToString();
+            lblBaseValue.Text = source + " - " + dctCurrencies[source];
         }
     }
 }
