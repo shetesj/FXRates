@@ -13,10 +13,9 @@
 
 </head>
 <body>
-    <div class="jumbotron"><h1>FX Rate Finder</h1></div>
     <form id="form1" runat="server">
         <div class="container">
-            <br />
+            <div class="jumbotron"><h1>Real time FX Rate Finder</h1></div>
             <asp:Table runat="server" ID="tblMain">
                 <asp:TableHeaderRow>
                     <asp:TableHeaderCell>
